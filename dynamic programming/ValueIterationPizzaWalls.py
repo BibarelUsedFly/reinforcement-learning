@@ -5,29 +5,12 @@ import numpy as np
 from copy import deepcopy
 from time import time
 from Reinforce import optimalize
-
-DETERMINISTIC = False
-BLACK = (0, 0, 0)
-LIGHTBLU = (150, 150, 255)
-GREENBLU = (100, 200, 200)
-REDBLU = (180, 0, 180)
-WHITE = (240, 240, 240)
-BLACK = (5, 5, 5)
-GRAY = (50, 50, 50)
-XMAX = 640
-YMAX = XMAX
-SIZE = 8
-RESOLUTION = int(XMAX/SIZE)
-ARROWSIZE = 0.001625*RESOLUTION
-DRAW_DISPLACEMENT_FACTOR_X = 0.3
-DRAW_DISPLACEMENT_FACTOR_Y = 0.4
-DRAW_DISPLACEMENT_FACTOR_XA = 0.5
-DRAW_DISPLACEMENT_FACTOR_YA = 0.5
+from parameters import *
+from PizzaEnvironment import *
 
 ## Cosas gráficas
 screen = pygame.display.set_mode((XMAX,YMAX)) # Dimensiones pantalla
 pygame.display.set_caption('Value Iteration - Pizza Version') # Título
-# pygame.key.set_repeat(1, 50) # Leer input de las teclas cada 50ms
 
 img_rob = pygame.image.load('../Assets/mRoball.png') # Cargar al cute_robot
 img_wall = pygame.image.load('../Assets/WallN.png') # Cargar la cute_wall
@@ -35,47 +18,7 @@ img_piz = pygame.image.load('../Assets/Pizza.png')
 img_piz = pygame.transform.scale(img_piz,(.9*RESOLUTION, .9*RESOLUTION))
 img_wall = pygame.transform.scale(img_wall,(.99*RESOLUTION, .99*RESOLUTION))
 
-## Reinforcement stuff
-GOAL = (6, 2)
-PIZZA = (1, 5)
-WALLS = [(4, 4), (3, 3), (2, 3), (1, 3), (0, 3)]
-STEP_REWARD = -1
-PIZZA_REWARD = 12
-ACTION_SET = ["↑", "↓", "→", "←"]
-THETA = 0.1
-GAMMA = 1.0 ## Si decaimiento porque el problema es finito
-TIME_END = False ## Partir la visualización desde el final
 
-def bind(state): ## Mínimo 0 y máximo SIZE
-    return (min(max(state[0], 0), SIZE-1), min(max(state[1], 0), SIZE-1))
-
-## pi(a | s)
-def policy_pi(policy, state, action_number):
-    ## A la matriz en python se accede con [y][x]
-    return policy[state[1], state[0], state[2], action_number]
-
-## V(s)
-def value(state, state_values):
-    return state_values[state[1], state[0], state[2]]
-
-def step(state, action, walls): ## State son coordenadas
-    init = state
-    ispizza = state[2]
-    if action == "↑":
-        state = bind((state[0], state[1]-1))
-    elif action == "↓":
-        state = bind((state[0], state[1]+1))
-    elif action == "→":
-        state = bind((state[0]+1, state[1]))
-    elif action == "←":
-        state = bind((state[0]-1, state[1]))
-    if state in walls:
-        state = init
-    reward = STEP_REWARD
-    if ispizza and (state == PIZZA):
-        reward += PIZZA_REWARD
-        ispizza = 0
-    return (state[0], state[1], ispizza), reward
 
 ## Inicio con política equiprobable ## MATRIZ
 start_policy = np.full((SIZE, SIZE, 2, len(ACTION_SET)), 1/len(ACTION_SET))
@@ -235,10 +178,7 @@ pizza = Entity(img_piz, PIZZA[0], PIZZA[1], screen, RESOLUTION)
 wall_entities = [Entity(img_wall, w[0], w[1], screen, RESOLUTION) for w in WALLS]
 ## Qué dibujo?
 draw_values = True
-if TIME_END:
-    t = len(history_of_histories[0])-1
-else:
-    t = 0
+t = 0
 policy_number = 0
 n_photo = 0 ## For photo saving
 while True:
@@ -256,17 +196,11 @@ while True:
             
             if event.key == pygame.K_UP:
                 policy_number = max(policy_number-1, 0) 
-                if TIME_END:
-                    t = len(history_of_histories[policy_number])-1
-                else:
-                    t = 0
+                t = 0
 
             if event.key == pygame.K_DOWN:
                 policy_number = min(policy_number+1, len(policy_history)-1)
-                if TIME_END:
-                    t = len(history_of_histories[policy_number])-1
-                else:
-                    t = 0
+                t = 0
 
             if event.key == pygame.K_f: #Photo
                 pygame.image.save(screen,
@@ -278,18 +212,11 @@ while True:
                 t = len(history_of_histories[policy_number])-1
             if event.key == pygame.K_w:
                 policy_number = 0
-                if TIME_END:
-                    t = len(history_of_histories[policy_number])-1
-                else:
-                    t = 0
+                t = 0
             if event.key == pygame.K_s:
                 policy_number = len(policy_history)-1
-                if TIME_END:
-                    t = len(history_of_histories[policy_number])-1
-                else:
-                    t = 0
+                t = 0
              
-            
             if event.key == pygame.K_p:
                 draw_values = not draw_values
 

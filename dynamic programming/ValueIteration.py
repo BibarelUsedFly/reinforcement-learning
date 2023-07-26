@@ -4,6 +4,7 @@ from entity import Entity
 import numpy as np
 from copy import deepcopy
 from time import time
+from Reinforce import optimalize
 from parameters import *
 from Environment import *
 
@@ -56,8 +57,11 @@ def policy_improvement(policy, state_values):
             new_state, reward = step(state, action)
             action_value = reward + GAMMA * value(new_state, state_values)
             action_values.append(action_value)
-        new_probs = np.zeros(len(ACTION_SET))
-        new_probs[np.argmax(action_values)] = 1.0
+        if DETERMINISTIC:
+            new_probs = np.zeros(len(ACTION_SET))
+            new_probs[np.argmax(action_values)] = 1.0
+        else:
+            new_probs = optimalize(np.array(action_values))
         new_policy[state[1], state[0]] = new_probs
     return new_policy
 
