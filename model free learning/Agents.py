@@ -4,7 +4,6 @@ from itertools import product
 from collections import OrderedDict
 from auxiliary import optimalize, epsilonize, manhattan_distance
 from functions import choose_action
-from time import time
 
 from Models import GOAL
 

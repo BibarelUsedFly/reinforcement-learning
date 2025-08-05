@@ -8,7 +8,7 @@ from Reinforce import optimalize
 from parameters import *
 from Environment import *
 
-## Cosas gráficas
+## Graphical stuff
 screen = pygame.display.set_mode((XMAX,YMAX)) # Dimensiones pantalla
 pygame.display.set_caption('Value Iteration') # Título
 
@@ -65,7 +65,6 @@ def policy_improvement(policy, state_values):
         new_policy[state[1], state[0]] = new_probs
     return new_policy
 
-print("INICIO")
 ## ------------------------------------------------------------------------
 start_time = time()
 history_of_histories = []

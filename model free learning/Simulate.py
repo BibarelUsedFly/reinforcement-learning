@@ -20,7 +20,7 @@ ALPHA = 0.10
 GAMMA = 0.99
 EPSILON = 0.10
 SAVE = True
-LOAD = "Checkpoint3000.npy"
+LOAD = "model free learning/Checkpoint3000.npy"
 CONTROLLER = "sarsa"
 
 ## Cosas gráficas --------------------------------------------------------------

@@ -8,9 +8,9 @@ from testbed import *
 MEAN = 0.0
 STDEV = 1.0
 ARMS = 10
-TIMECYCLES = 2000 ## Tiempo
-TESTPROBLEMS = 500  ## Cantidad de ejecuciones a promediar
-EPSILONS = [0.00, 0.01, 0.10] ## Agentes a comparar
+TIMECYCLES = 2000 ## Time
+TESTPROBLEMS = 500  ## How many runs to average
+EPSILONS = [0.00, 0.01, 0.10] ## Agents to compare
 COLORS = ["#33a02c", "#a6cee3", "#1f78b4"]
 
 testbed = make_testbed(TESTPROBLEMS, MEAN, STDEV, ARMS)
@@ -27,10 +27,10 @@ for i in range(TESTPROBLEMS):
         final_data[agent] += (1/(i+1)) * (data[1] - final_data[agent])
         final_datap[agent] += (1/(i+1)) * (data[2] - final_datap[agent])
     if (i % 100 == 0) and (i != 0):
-        print("Ciclo {}/{} completado".format(i, TESTPROBLEMS))
+        print("Cycle {}/{} done".format(i, TESTPROBLEMS))
 
-## Graficar
-matplotlib.style.use('seaborn')
+## Plot
+matplotlib.style.use('seaborn-v0_8')
 fig1, axes = plt.subplots(2)
 fig1.canvas.manager.set_window_title(
     '{}-Armed Testbed {} Steps Results'.format(ARMS, TIMECYCLES))
@@ -38,12 +38,12 @@ fig1.canvas.manager.set_window_title(
 plt.subplot(2, 1, 1)
 for d in range(len(final_data)):
     plt.plot(final_data[d], color=COLORS[d%len(COLORS)])
-plt.ylabel('Recompensa Promedio')
+plt.ylabel('Average Reward')
 
 plt.subplot(2, 1, 2)
 for d in range(len(final_datap)):
     plt.plot(final_datap[d], color=COLORS[d%len(COLORS)])
-plt.ylabel('Porcentaje de elección óptima')
+plt.ylabel('Optimal choice percentage')
 
 fontP = FontProperties()
 fontP.set_size('small')
