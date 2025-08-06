@@ -21,9 +21,11 @@ pip install -r requirements.txt
 
 ## Contents 
 ### N-Armed Bandits
-This code replicates the 10-armed testbed used in the book to compare performance of ε-greedy algorithms with varying exploration rate ε.
-
+Bandits.py replicates the 10-armed testbed used in the book to compare performance of ε-greedy algorithms with varying exploration rate ε.
 Running Bandits.py will show some curves representing the competing agents.
+
+dicegame.py will show an interactive game where a simple agent has to roll a die each timestep. The possible actions are a d4, d6, d8, d10, d12 and d20. While the obvious best action is to roll a d20, the agent has no way to know this, and chance may have it that a better action yields worse results. The display shows the Q-Table evolution of the agent as it learns from actions.
+Game parameters can be adjusted in parameters.py
 
 ### Dynamic Programming
 This section implements three algorithms to obtain the best policy for navigating a simple gridworld. The differently colored square marks the goal.
